@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import logo from "../../assets/logo-catalogo-consultora-acsa.png"
 
 function NavBrand() {
@@ -5,12 +6,14 @@ function NavBrand() {
 
 	return (
 		<>
-			<img
-				src={logo}
-				alt={logoText}
-				className="m-auto w-55 pb-4"
-				title={logoText}
-			/>
+			<Link to="/">
+				<img
+					src={logo}
+					alt={logoText}
+					className="m-auto w-48 lg:w-55"
+					title={logoText}
+				/>
+			</Link>
 		</>
 	)
 }

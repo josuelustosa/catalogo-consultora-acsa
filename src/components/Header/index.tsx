@@ -3,7 +3,7 @@ import NavBrand from "./NavBrand"
 
 function Header() {
 	return (
-		<div className="bg-primary-900 py-6">
+		<div className="bg-primary-900 w-full flex flex-col gap-3 py-4">
 			<NavBrand />
 			<NavBar />
 		</div>
