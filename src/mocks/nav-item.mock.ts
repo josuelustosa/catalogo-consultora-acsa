@@ -30,6 +30,13 @@ export const NAV_ITEMS = [
     kind: "catalog",
     slug: "moda-intima",
   },
+  {
+    id: 6,
+    label: "Joias & Acessórios",
+    path: "/catalogo/joias-e-acessorios",
+    kind: "catalog",
+    slug: "joias-e-acessorios",
+  },
 ] as const satisfies readonly NavItem[]
 
 type AnyNavItem = (typeof NAV_ITEMS)[number]
