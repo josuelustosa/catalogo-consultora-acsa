@@ -50,6 +50,16 @@
   --color-text-brand: var(--color-primary);
 
   /* ==========================================================================
+     LAYOUT
+     ========================================================================== */
+
+  /* Largura padrão: grids de produtos (4 cards confortáveis) */
+  --container-page: 80rem;
+
+  /* Largura reduzida: páginas de leitura (sobre, detalhe de produto) */
+  --container-narrow: 48rem;
+
+  /* ==========================================================================
      BORDERS
      ========================================================================== */
 

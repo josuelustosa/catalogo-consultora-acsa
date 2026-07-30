@@ -1,12 +1,17 @@
+import Container from "../Container";
 import NavBar from "./NavBar";
 import NavBrand from "./NavBrand";
 
 function Header() {
   return (
-    <div className="bg-primary w-full flex flex-col gap-3 py-4">
-      <NavBrand />
-      <NavBar />
-    </div>
+    <header className="w-full bg-primary py-4">
+      <Container>
+        <div className="flex flex-col gap-3">
+          <NavBrand />
+          <NavBar />
+        </div>
+      </Container>
+    </header>
   );
 }
 

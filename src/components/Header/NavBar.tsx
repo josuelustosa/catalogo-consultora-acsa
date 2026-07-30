@@ -5,7 +5,7 @@ function NavBar() {
   return (
     <nav
       aria-label="Navegação principal (nav)"
-      className="overflow-x-auto overflow-y-hidden lg:overflow-visible"
+      className="overflow-x-auto overflow-y-hidden lg:overflow-x-visible"
     >
       <ul className="mx-auto flex w-max min-w-full justify-center gap-2 md:gap-4 px-4 text-md">
         {NAV_ITEMS.map((item) => (
