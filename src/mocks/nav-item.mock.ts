@@ -1,4 +1,4 @@
-import type { NavItem } from "../types/nav-item.type"
+import type { NavItem } from "../types/nav-item.type";
 
 export const NAV_ITEMS = [
   { id: 1, label: "Início", path: "/", kind: "home" },
@@ -8,6 +8,7 @@ export const NAV_ITEMS = [
     path: "/catalogo/boticario-eudora-e-oui",
     kind: "catalog",
     slug: "boticario-eudora-e-oui",
+    brands: ["Boticário", "Eudora", "OUI"],
   },
   {
     id: 3,
@@ -15,6 +16,7 @@ export const NAV_ITEMS = [
     path: "/catalogo/natura-e-avon",
     kind: "catalog",
     slug: "natura-e-avon",
+    brands: ["Natura", "Avon"],
   },
   {
     id: 4,
@@ -22,6 +24,7 @@ export const NAV_ITEMS = [
     path: "/catalogo/romance-e-favorita",
     kind: "catalog",
     slug: "romance-e-favorita",
+    brands: ["Romance", "Favorita"],
   },
   {
     id: 5,
@@ -29,6 +32,7 @@ export const NAV_ITEMS = [
     path: "/catalogo/moda-intima",
     kind: "catalog",
     slug: "moda-intima",
+    brands: ["Moda Íntima"],
   },
   {
     id: 6,
@@ -36,16 +40,21 @@ export const NAV_ITEMS = [
     path: "/catalogo/joias-e-acessorios",
     kind: "catalog",
     slug: "joias-e-acessorios",
+    brands: ["Joias", "Acessórios"],
   },
-] as const satisfies readonly NavItem[]
+] as const satisfies readonly NavItem[];
 
-type AnyNavItem = (typeof NAV_ITEMS)[number]
-type CatalogItem = Extract<AnyNavItem, { kind: "catalog" }>
+type AnyNavItem = (typeof NAV_ITEMS)[number];
+type CatalogItem = Extract<AnyNavItem, { kind: "catalog" }>;
 
 export function isCatalogNavItem(item: AnyNavItem): item is CatalogItem {
-  return item.kind === "catalog"
+  return item.kind === "catalog";
 }
 
-export const CATALOG_NAV_ITEMS = NAV_ITEMS.filter(isCatalogNavItem)
+export const CATALOG_NAV_ITEMS = NAV_ITEMS.filter(isCatalogNavItem);
 
-export type CatalogSlug = CatalogItem["slug"]
+export function getCatalogNavItemBySlug(slug: string): CatalogItem | undefined {
+  return CATALOG_NAV_ITEMS.find((item) => item.slug === slug);
+}
+
+export type CatalogSlug = CatalogItem["slug"];
