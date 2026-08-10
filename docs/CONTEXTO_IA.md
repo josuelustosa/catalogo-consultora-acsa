@@ -8,6 +8,8 @@ seguir em novas implementações.
 > fluxo de dados mudar. Ele é a fonte de contexto, não um changelog — o
 > histórico de commits cumpre esse papel.
 
+A fila de tarefas com critérios de aceite fica em [PLANO_IA.md](./PLANO_IA.md).
+
 ---
 
 ## Visão geral
@@ -22,13 +24,13 @@ com os produtos de todas as marcas. Hoje esse retorno é simulado por um mock.
 
 ## Stack
 
-| Item | Versão | Observação |
-| --- | --- | --- |
-| React | 19.2.8 | |
-| TypeScript | 6.0.3 | `tsc -b` no build |
-| Vite | 8.1.5 | |
+| Item         | Versão | Observação                                       |
+| ------------ | ------ | ------------------------------------------------ |
+| React        | 19.2.8 |                                                  |
+| TypeScript   | 6.0.3  | `tsc -b` no build                                |
+| Vite         | 8.1.5  |                                                  |
 | React Router | 7.18.1 | import de `react-router`, não `react-router-dom` |
-| Tailwind CSS | 4.3.3 | via `@tailwindcss/vite`, sem `tailwind.config` |
+| Tailwind CSS | 4.3.3  | via `@tailwindcss/vite`, sem `tailwind.config`   |
 
 Dependências usam **versão exata**, sem `^` ou `~`. Ver
 [dependency-management.md](./dependency-management.md).
@@ -43,13 +45,18 @@ Scripts: `npm run dev`, `npm run build` (`tsc -b && vite build`), `npm run lint`
 src/
 ├── components/          # UI compartilhada entre páginas
 │   ├── Container.tsx    # larguras "default" (80rem) e "narrow" (48rem)
+│   ├── EmptyState.tsx   # mensagem + saída para qualquer estado vazio
 │   └── Header/
 ├── data/
 │   └── products.mock.ts # retorno bruto simulado da planilha
+├── hooks/
+│   └── use-debounced-value.ts
 ├── mocks/
 │   └── nav-item.mock.ts # itens do menu + helpers de catálogo
 ├── pages/
 │   ├── Home.tsx
+│   ├── CatalogHome.tsx  # /catalogo sem slug: seletor de catálogos
+│   ├── NotFound.tsx     # rota "*"
 │   └── Catalog/         # página + componentes exclusivos dela
 ├── router/
 ├── services/
@@ -85,7 +92,13 @@ services/catalog.service.ts    getCatalogBySlug(slug)
              │
              ▼
         CatalogView { slug, title, brands, products }
+                     │
+                     ▼
+        searchProducts(products, termo)   recorte de busca, na página
 ```
+
+O `slug` vazio (`/catalogo`) não entra nesse fluxo: tem rota própria
+(`pages/CatalogHome.tsx`), que apenas lista `CATALOG_NAV_ITEMS` como links.
 
 Pontos que precisam ser preservados em qualquer alteração:
 
@@ -96,11 +109,13 @@ Pontos que precisam ser preservados em qualquer alteração:
 - **A planilha devolve tudo, o recorte é da camada de serviço.**
   `data/products.mock.ts` não sabe de catálogos; nenhum arquivo por catálogo
   deve voltar a existir (essa abordagem foi removida — ver Histórico).
-- **Comparação de marca é normalizada.** `normalize()` aplica trim, lowercase e
+- **Comparação de texto é normalizada.** `normalize()` aplica trim, lowercase e
   remoção de acentos, porque a planilha é editada à mão e `"boticário "` e
-  `"Boticario"` precisam casar. Toda comparação de marca deve passar por ela.
+  `"Boticario"` precisam casar. Toda comparação de marca deve passar por ela, e
+  a busca também usa — o usuário digita sem acento.
 - **`getCatalogBySlug` devolve `null` para slug desconhecido.** A página trata
-  esse caso e o de catálogo sem produtos com mensagens distintas.
+  esse caso, o de catálogo sem produtos e o de busca sem resultado com
+  mensagens distintas — todos via `<EmptyState>`, ver Design system.
 
 ### Tipos
 
@@ -152,6 +167,11 @@ Padrões visuais em uso: foco com `focus-visible:ring-2 ring-focus-ring`,
 feedback de clique com `active:scale-95`, cards em `rounded-lg border-border
 bg-surface shadow-sm`, imagens `aspect-square` com `loading="lazy"`.
 
+**Estados vazios passam por `<EmptyState>`.** Nada de `<p>` centralizado solto:
+o componente padroniza mensagem e saída (um `to`, que vira `Link`, **ou** um
+`onClick`, que vira `button` — nunca os dois). Novos estados vazios devem
+consumi-lo em vez de repetir o layout.
+
 Acessibilidade: SVGs decorativos levam `aria-hidden="true"`; inputs sem label
 visível levam `aria-label`.
 
@@ -162,35 +182,24 @@ visível levam `aria-label`.
 Implementado e verificado (`tsc -b` e `vite build` passam):
 
 - rota dinâmica `/catalogo/:slug` cobrindo os 5 catálogos;
-- listagem em grid responsivo (2 colunas, 4 em `lg`);
+- rota `/catalogo` sem slug com seletor de catálogos, em vez da rota `*`;
+- listagem em grid responsivo (1 coluna, 2 em `md`, 4 em `lg`);
 - card com marca, título, preço com/sem promoção e CTA de WhatsApp;
-- tratamento de slug inválido e de catálogo vazio.
+- busca por título ou marca, com debounce de 250ms e estado vazio próprio;
+- slug inválido, catálogo vazio, busca sem resultado e rota `*` com
+  `<EmptyState>`.
 
-Aberto — pontos naturais para a próxima implementação:
-
-- **Busca sem comportamento.** O input em `CatalogHeader` é só UI. Falta estado,
-  filtro e provavelmente debounce.
-- **`groupByBrand` sem consumidor.** Existe no serviço, pronta para uma
-  listagem seccionada por marca dentro do catálogo.
-- **Dados ainda mockados.** `data/products.mock.ts` deve ser substituído pela
-  leitura real da Planilha Google. O contrato a preservar é o de uma lista plana
-  de `Product`; idealmente a troca não deve exigir mudança em
-  `catalog.service.ts` além da origem dos dados. Isso trará assincronismo —
-  `getCatalogBySlug` passa a ser assíncrona e a página precisará de estados de
-  carregando/erro.
-- **Sem imagens.** Nenhum produto do mock tem `imageUrl`; o card já trata a
-  ausência com um bloco vazio.
-- **`Home.tsx` é placeholder** e destoa da formatação do resto (indentação de 4
-  espaços, sem ponto e vírgula).
-- **Sem testes.** Não há runner configurado. `catalog.service.ts` é o candidato
-  óbvio para os primeiros testes (normalização, filtro, agrupamento).
+O que está aberto — com critérios de aceite — está em
+[PLANO_IA.md](./PLANO_IA.md). Em resumo: consumidor para `groupByBrand`, troca
+do mock pela Planilha Google (traz assincronismo e estados de carregando/erro),
+imagens dos produtos, `Home.tsx` ainda placeholder e ausência de testes.
 
 ---
 
 ## Convenções de trabalho
 
 - **Idioma:** código e identificadores em inglês; comentários, textos de UI e
-  mensagens de commit em pt-BR. Comentário só onde explica um *porquê* não
+  mensagens de commit em pt-BR. Comentário só onde explica um _porquê_ não
   óbvio (ver os comentários de `normalize` e de `whatsapp.ts` como referência de
   tom).
 - **Commits:** Conventional Commits, em pt-BR, objetivos e técnicos, com
