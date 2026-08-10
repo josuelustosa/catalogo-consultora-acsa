@@ -31,11 +31,13 @@ com os produtos de todas as marcas. Hoje esse retorno é simulado por um mock.
 | Vite         | 8.1.5  |                                                  |
 | React Router | 7.18.1 | import de `react-router`, não `react-router-dom` |
 | Tailwind CSS | 4.3.3  | via `@tailwindcss/vite`, sem `tailwind.config`   |
+| Prettier     | 3.6.2  | opções default, sem `.prettierrc`                |
 
 Dependências usam **versão exata**, sem `^` ou `~`. Ver
 [dependency-management.md](./dependency-management.md).
 
-Scripts: `npm run dev`, `npm run build` (`tsc -b && vite build`), `npm run lint`.
+Scripts: `npm run dev`, `npm run build` (`tsc -b && vite build`),
+`npm run lint`, `npm run format` e `npm run format:check`.
 
 ---
 
@@ -205,10 +207,11 @@ imagens dos produtos, `Home.tsx` ainda placeholder e ausência de testes.
 - **Formatação:** Prettier com as opções default — 2 espaços, 80 colunas, aspas
   duplas, ponto e vírgula, vírgula final. Não há `.prettierrc`: o padrão do
   Prettier já é o do projeto, e um arquivo de config só criaria divergência a
-  manter. `.editorconfig` cobre recuo, EOL e newline final para quem não usa a
-  extensão; `.vscode/extensions.json` recomenda as extensões. Prettier ainda não
-  é dependência do projeto — para conferir tudo de uma vez,
-  `npx prettier --check`.
+  manter. `npm run format` aplica, `npm run format:check` verifica. O Prettier 3
+  respeita o `.gitignore`, então `.prettierignore` só lista o que o git versiona
+  e ele não deve tocar. `.editorconfig` cobre recuo, EOL e newline final para
+  quem não usa a extensão do editor; `.vscode/extensions.json` recomenda as
+  extensões.
 - **Commits:** Conventional Commits, em pt-BR, objetivos e técnicos, com
   bullet-points no corpo quando houver mais de um ponto. Escopo entre
   parênteses (`feat(catalog):`, `refactor(router):`).

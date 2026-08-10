@@ -131,9 +131,17 @@ normalização, filtro por marca, busca e agrupamento são funções puras.
 item 9; falta decidir o que a página mostra — provavelmente uma chamada e os
 catálogos em destaque, reaproveitando o layout de `CatalogHome`.
 
-### 12. Prettier como dependência fixa `[ ]`
+### 12. Prettier como dependência fixa `[x]`
 
-O projeto fixa versão exata de tudo, mas a formatação hoje depende da extensão
-do editor de cada dev, sem versão. Adicionar `prettier` como devDependency com
-versão exata e um script `format` deixaria o padrão reproduzível e verificável
-fora do editor.
+A formatação dependia da extensão do editor de cada dev, sem versão, num projeto
+que fixa versão exata de todo o resto.
+
+- `prettier` 3.6.2 como devDependency, versão exata pelo `save-exact` do
+  `.npmrc`. Não tem dependências transitivas, então não mexe na árvore.
+- `npm run format` aplica e `npm run format:check` verifica — este entra no
+  passo de validação de `dependency-management.md`, ao lado de build e lint.
+- `.prettierignore` só com `package-lock.json`: o Prettier 3 já respeita o
+  `.gitignore`, então `dist/` e `node_modules` não precisam ser repetidos. Hoje o
+  Prettier não alteraria o lock, mas o arquivo é do npm e não deve ficar sujeito
+  a reformatação numa versão futura.
+- Sem `.prettierrc` — ver a convenção de formatação no `CONTEXTO_IA.md`.
