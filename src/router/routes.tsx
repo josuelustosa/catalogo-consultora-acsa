@@ -3,6 +3,7 @@ import type { RouteObject } from "react-router";
 import Catalog from "../pages/Catalog";
 import CatalogHome from "../pages/CatalogHome";
 import Home from "../pages/Home";
+import NotFound from "../pages/NotFound";
 
 export const routes: RouteObject[] = [
   {
@@ -19,6 +20,6 @@ export const routes: RouteObject[] = [
   },
   {
     path: "*",
-    element: <h1>Not Found</h1>,
+    element: <NotFound />,
   },
 ];
