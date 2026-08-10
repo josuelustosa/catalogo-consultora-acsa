@@ -1,0 +1,6 @@
+# O Prettier 3 já respeita o .gitignore, então dist/ e node_modules ficam de
+# fora sem precisar repetir aqui. Só o que o git versiona e o Prettier não deve
+# tocar entra nesta lista.
+
+# Gerado e mantido pelo npm.
+package-lock.json
