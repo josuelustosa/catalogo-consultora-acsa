@@ -1,13 +1,18 @@
 type CatalogHeaderProps = {
   title: string;
+  searchTerm: string;
+  onSearchTermChange: (term: string) => void;
 };
 
-function CatalogHeader({ title }: CatalogHeaderProps) {
+function CatalogHeader({
+  title,
+  searchTerm,
+  onSearchTermChange,
+}: CatalogHeaderProps) {
   return (
     <div className="my-8 flex flex-col gap-4 border-b border-divider pb-4 sm:flex-row sm:items-center sm:justify-between">
       <h1 className="text-xl font-bold text-text-brand sm:text-2xl">{title}</h1>
 
-      {/* Busca ainda sem filtro: apenas o campo, o comportamento entra depois. */}
       <div className="relative w-full sm:max-w-xs">
         <svg
           aria-hidden="true"
@@ -24,7 +29,9 @@ function CatalogHeader({ title }: CatalogHeaderProps) {
 
         <input
           type="search"
-          aria-label="Pesquisar produto"
+          value={searchTerm}
+          onChange={(event) => onSearchTermChange(event.target.value)}
+          aria-label="Pesquisar produto por nome ou marca"
           placeholder="Pesquisar produto..."
           className="w-full rounded-full border border-border bg-surface py-2 pl-11 pr-4 text-sm text-text placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
         />

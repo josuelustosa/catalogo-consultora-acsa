@@ -31,6 +31,24 @@ export function getProductsByBrands(brands: readonly string[]): Product[] {
   return PRODUCTS.filter((product) => wanted.has(normalize(product.brand)));
 }
 
+/**
+ * Busca por título ou marca. Passa pelo mesmo `normalize` do filtro de marca
+ * porque o usuário digita sem acento ("boticario") e a planilha tem acento.
+ */
+export function searchProducts(products: Product[], term: string): Product[] {
+  const query = normalize(term);
+
+  if (!query) {
+    return products;
+  }
+
+  return products.filter(
+    (product) =>
+      normalize(product.title).includes(query) ||
+      normalize(product.brand).includes(query),
+  );
+}
+
 /** Agrupa por marca preservando a ordem de primeira aparição. */
 export function groupByBrand(products: Product[]): CatalogBrandGroup[] {
   const groups: CatalogBrandGroup[] = [];
