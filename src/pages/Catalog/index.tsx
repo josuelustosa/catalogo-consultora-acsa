@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useParams } from "react-router";
 
 import Container from "../../components/Container";
+import EmptyState from "../../components/EmptyState";
 import { useDebouncedValue } from "../../hooks/use-debounced-value";
 import {
   getCatalogBySlug,
@@ -29,9 +30,10 @@ function CatalogContent({ slug }: CatalogContentProps) {
   if (!catalog) {
     return (
       <Container>
-        <p className="py-12 text-center text-text-secondary">
-          Catálogo não encontrado.
-        </p>
+        <EmptyState
+          message="Catálogo não encontrado."
+          action={{ label: "Ver catálogos", to: "/catalogo" }}
+        />
       </Container>
     );
   }
@@ -48,24 +50,19 @@ function CatalogContent({ slug }: CatalogContentProps) {
       />
 
       {isEmptyCatalog ? (
-        <p className="py-12 text-center text-text-secondary">
-          Nenhum produto disponível neste catálogo no momento.
-        </p>
+        <EmptyState
+          message="Nenhum produto disponível neste catálogo no momento."
+        />
       ) : products.length === 0 ? (
-        <div className="flex flex-col items-center gap-4 py-12">
-          <p className="text-center text-text-secondary">
-            Nenhum produto encontrado para{" "}
-            <strong className="text-text">{debouncedSearchTerm}</strong>.
-          </p>
-
-          <button
-            type="button"
-            onClick={() => setSearchTerm("")}
-            className="rounded-full border border-border px-4 py-2 text-sm font-medium text-text-brand transition-all hover:bg-surface-soft active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            Limpar busca
-          </button>
-        </div>
+        <EmptyState
+          message={
+            <>
+              Nenhum produto encontrado para{" "}
+              <strong className="text-text">{debouncedSearchTerm}</strong>.
+            </>
+          }
+          action={{ label: "Limpar busca", onClick: () => setSearchTerm("") }}
+        />
       ) : (
         <>
           <CatalogGrid products={products} />
