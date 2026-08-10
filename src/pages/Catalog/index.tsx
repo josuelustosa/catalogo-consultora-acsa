@@ -50,9 +50,7 @@ function CatalogContent({ slug }: CatalogContentProps) {
       />
 
       {isEmptyCatalog ? (
-        <EmptyState
-          message="Nenhum produto disponível neste catálogo no momento."
-        />
+        <EmptyState message="Nenhum produto disponível neste catálogo no momento." />
       ) : products.length === 0 ? (
         <EmptyState
           message={
