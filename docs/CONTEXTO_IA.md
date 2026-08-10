@@ -202,6 +202,13 @@ imagens dos produtos, `Home.tsx` ainda placeholder e ausência de testes.
   mensagens de commit em pt-BR. Comentário só onde explica um _porquê_ não
   óbvio (ver os comentários de `normalize` e de `whatsapp.ts` como referência de
   tom).
+- **Formatação:** Prettier com as opções default — 2 espaços, 80 colunas, aspas
+  duplas, ponto e vírgula, vírgula final. Não há `.prettierrc`: o padrão do
+  Prettier já é o do projeto, e um arquivo de config só criaria divergência a
+  manter. `.editorconfig` cobre recuo, EOL e newline final para quem não usa a
+  extensão; `.vscode/extensions.json` recomenda as extensões. Prettier ainda não
+  é dependência do projeto — para conferir tudo de uma vez,
+  `npx prettier --check`.
 - **Commits:** Conventional Commits, em pt-BR, objetivos e técnicos, com
   bullet-points no corpo quando houver mais de um ponto. Escopo entre
   parênteses (`feat(catalog):`, `refactor(router):`).

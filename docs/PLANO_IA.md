@@ -99,12 +99,41 @@ passa a precisar de estados de carregando e erro.
 Nenhum produto do mock tem `imageUrl`. `CatalogCard` já trata a ausência com um
 bloco vazio; falta definir origem e proporção das imagens reais.
 
-### 9. `Home.tsx` `[ ]`
+### 9. Formatação padronizada `[x]`
 
-Placeholder, e fora do padrão de formatação do resto (indentação de 4 espaços,
-sem ponto e vírgula). Mesmo problema em `App.tsx` e `router/index.tsx`.
+`Home.tsx`, `App.tsx` e `router/index.tsx` estavam com indentação de 4 espaços e
+sem ponto e vírgula. Corrigidos manualmente; a varredura do resto do repositório
+encontrou mais três desvios:
+
+- `index.html` indentado com tab — o único arquivo com tab no projeto;
+- `src/main.tsx` e `eslint.config.js` com aspas simples e sem ponto e vírgula,
+  mesmo desvio dos três arquivos acima;
+- `.npmrc` e `docs/dependency-management.md` sem newline final.
+
+O padrão de fato do projeto é **Prettier com as opções default** (2 espaços, 80
+colunas, aspas duplas, ponto e vírgula, vírgula final) — o repositório inteiro já
+seguia isso. Confirmado com `npx prettier --check`, que agora passa em tudo.
+
+Formalizado em `.editorconfig` (recuo, EOL, newline final, espaço em branco) e
+`.vscode/extensions.json` (Prettier, ESLint, EditorConfig, Tailwind). Escolhido
+`.editorconfig` em vez de `.vscode/settings.json` porque o `.gitignore` ignora
+`.vscode/*` exceto `extensions.json`: o `.editorconfig` é versionado sem abrir
+exceção, e não é específico do VS Code.
 
 ### 10. Testes `[ ]`
 
 Sem runner configurado. `catalog.service.ts` é o primeiro candidato:
 normalização, filtro por marca, busca e agrupamento são funções puras.
+
+### 11. Conteúdo da Home `[ ]`
+
+`Home.tsx` continua um placeholder com um `<h1>`. A formatação foi resolvida no
+item 9; falta decidir o que a página mostra — provavelmente uma chamada e os
+catálogos em destaque, reaproveitando o layout de `CatalogHome`.
+
+### 12. Prettier como dependência fixa `[ ]`
+
+O projeto fixa versão exata de tudo, mas a formatação hoje depende da extensão
+do editor de cada dev, sem versão. Adicionar `prettier` como devDependency com
+versão exata e um script `format` deixaria o padrão reproduzível e verificável
+fora do editor.
