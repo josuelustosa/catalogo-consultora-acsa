@@ -1,0 +1,200 @@
+import type { Product } from "../types/product.type";
+
+/**
+ * Retorno bruto simulado da Planilha Google: uma lista plana com os produtos
+ * de todas as marcas, na ordem em que foram cadastrados. Nenhum recorte por
+ * marca acontece aqui — isso é responsabilidade de `services/catalog.service`.
+ */
+export const PRODUCTS: Product[] = [
+  {
+    id: "1",
+    brand: "Boticário",
+    title: "Malbec Desodorante Colônia 100ml",
+    price: 189.5,
+    promoPrice: 149.5,
+  },
+  {
+    id: "2",
+    brand: "Eudora",
+    title: "Sérum Facial Antissinais 30ml",
+    price: 129.9,
+  },
+  {
+    id: "3",
+    brand: "Natura",
+    title: "Kit Presente Hidratação Tododia 3 itens",
+    price: 189.9,
+    promoPrice: 159.9,
+  },
+  {
+    id: "4",
+    brand: "Romance",
+    title: "Camisola Renda Marfim tamanho M",
+    price: 89.9,
+  },
+  {
+    id: "5",
+    brand: "Joias",
+    title: "Colar Ponto de Luz Folheado a Ouro",
+    price: 99.9,
+    promoPrice: 79.9,
+  },
+  {
+    id: "6",
+    brand: "Avon",
+    title: "Batom Matte Vermelho Clássico 3,6g",
+    price: 39.9,
+  },
+  {
+    id: "7",
+    brand: "Moda Íntima",
+    title: "Conjunto Sutiã e Calcinha Algodão tamanho G",
+    price: 89.9,
+    promoPrice: 69.9,
+  },
+  {
+    id: "8",
+    brand: "OUI",
+    title: "Perfume OUI Vanille Eau de Parfum 75ml",
+    price: 219.9,
+  },
+  {
+    id: "9",
+    brand: "Natura",
+    title: "Creme Hidratante Nativa SPA Ameixa 400ml",
+    price: 79.9,
+  },
+  {
+    id: "10",
+    brand: "Favorita",
+    title: "Pijama Longo Viscose tamanho P",
+    price: 139.9,
+    promoPrice: 119.9,
+  },
+  {
+    id: "11",
+    brand: "Acessórios",
+    title: "Lenço Estampado Seda 70x70cm",
+    price: 49.9,
+  },
+  {
+    id: "12",
+    brand: "Boticário",
+    title: "Máscara de Cílios Volume Extra 8ml",
+    price: 59.9,
+  },
+  {
+    id: "13",
+    brand: "Joias",
+    title: "Brinco Argola Dourada 2cm",
+    price: 54.9,
+  },
+  {
+    id: "14",
+    brand: "Avon",
+    title: "Desodorante Antitranspirante Roll-on 50ml",
+    price: 29.9,
+    promoPrice: 24.9,
+  },
+  {
+    id: "15",
+    brand: "Romance",
+    title: "Robe Acetinado tamanho único",
+    price: 139.9,
+  },
+  {
+    id: "16",
+    brand: "Eudora",
+    title: "Base Líquida Alta Cobertura 30ml",
+    price: 114.9,
+    promoPrice: 94.9,
+  },
+  {
+    id: "17",
+    brand: "Moda Íntima",
+    title: "Calcinha Tanga Microfibra kit com 3",
+    price: 29.9,
+  },
+  {
+    id: "18",
+    brand: "Natura",
+    title: "Óleo Corporal Tododia Algodão 200ml",
+    price: 44.9,
+  },
+  {
+    id: "19",
+    brand: "Joias",
+    title: "Pulseira Berloque Prata 925",
+    price: 129.9,
+    promoPrice: 99.9,
+  },
+  {
+    id: "20",
+    brand: "OUI",
+    title: "Perfume OUI Ambar Eau de Parfum 50ml",
+    price: 179.9,
+  },
+  {
+    id: "21",
+    brand: "Acessórios",
+    title: "Necessaire Estampada tamanho médio",
+    price: 64.9,
+  },
+  {
+    id: "22",
+    brand: "Favorita",
+    title: "Pijama Curto Algodão tamanhos P ao GG",
+    price: 89.9,
+  },
+  {
+    id: "23",
+    brand: "Boticário",
+    title: "Sabonete Líquido Cuide-se Bem 250ml",
+    price: 44.9,
+    promoPrice: 34.9,
+  },
+  {
+    id: "24",
+    brand: "Moda Íntima",
+    title: "Sutiã Sem Bojo Renda tamanho 44",
+    price: 79.9,
+  },
+  {
+    id: "25",
+    brand: "Avon",
+    title: "Perfume Avon Far Away Eau de Parfum 50ml",
+    price: 129.9,
+    promoPrice: 109.9,
+  },
+  {
+    id: "26",
+    brand: "Eudora",
+    title: "Hidratante Labial Eudora Glow 15g",
+    price: 32.9,
+  },
+  {
+    id: "27",
+    brand: "Romance",
+    title: "Camisola Curta Cetim tamanho G",
+    price: 99.9,
+  },
+  {
+    id: "28",
+    brand: "Acessórios",
+    title: "Cinto Fino Fivela Dourada tamanho M",
+    price: 59.9,
+  },
+  {
+    id: "29",
+    brand: "Favorita",
+    title: "Conjunto Pijama Inverno Flanela tamanho M",
+    price: 179.9,
+    promoPrice: 149.9,
+  },
+  {
+    id: "30",
+    brand: "Joias",
+    title: "Anel Solitário Zircônia aro 18",
+    price: 69.9,
+  },
+];

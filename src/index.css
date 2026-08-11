@@ -1,46 +1,99 @@
-/* index.css */
 @import "tailwindcss";
 
 @theme {
-  /* Primary Scale */
-  --color-primary-900: #844741;
-  --color-primary-700: #a3726b;
-  --color-primary-500: #c19d94;
-  --color-primary-300: #e0c7be;
-  --color-primary-100: #fff2e8;
+  /* ==========================================================================
+     PALETTE
+     ========================================================================== */
 
-  /* Semantic */
-  --color-primary: var(--color-primary-700);
-  --color-primary-hover: var(--color-primary-900);
-  --color-primary-soft: var(--color-primary-300);
+  --color-brown-700: #5c312d;
+  --color-brown-500: #854742;
+  --color-bege: #ffe1df;
 
-  /* Backgrounds */
-  --color-bg-default: #ffffff;
-  --color-bg-subtle: var(--color-primary-100);
-  --color-bg-muted: var(--color-primary-300);
+  --color-white: #ffffff;
 
-  /* Text */
-  --color-text-primary: #2b2b2b;
-  --color-text-secondary: #5a5a5a;
-  --color-text-inverse: #ffffff;
-  --color-text-brand: var(--color-primary-900);
+  --color-gray-900: #2b2b2b;
+  --color-gray-700: #5f5f5f;
 
-  /* Borders */
-  --color-border-default: var(--color-primary-300);
-  --color-border-strong: var(--color-primary-700);
+  /* ==========================================================================
+     BRAND
+     ========================================================================== */
 
-  /* States */
-  --color-hover-overlay: rgba(132, 71, 65, 0.08);
-  --color-active-overlay: rgba(132, 71, 65, 0.16);
-  --color-focus-ring: rgba(132, 71, 65, 0.4);
+  --color-primary: var(--color-brown-500);
+  --color-primary-hover: var(--color-brown-700);
+  --color-accent: var(--color-bege);
 
-  /* Radius */
+  /* ==========================================================================
+     SURFACES
+     ========================================================================== */
+
+  /* Fundo principal da aplicação */
+  --color-background: var(--color-white);
+
+  /* Cards, modais, inputs */
+  --color-surface: var(--color-white);
+
+  /* Destaques suaves (rodapé do card, banners, badges...) */
+  --color-surface-soft: rgb(255 225 223 / 50%);
+
+  /* Destaques sólidos */
+  --color-surface-highlight: var(--color-bege);
+
+  /* ==========================================================================
+     TEXT
+     ========================================================================== */
+
+  --color-text: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-700);
+  --color-text-inverse: var(--color-white);
+
+  /* Títulos, links e destaques da marca */
+  --color-text-brand: var(--color-primary);
+
+  /* ==========================================================================
+     LAYOUT
+     ========================================================================== */
+
+  /* Largura padrão: grids de produtos (4 cards confortáveis) */
+  --container-page: 80rem;
+
+  /* Largura reduzida: páginas de leitura (sobre, detalhe de produto) */
+  --container-narrow: 48rem;
+
+  /* ==========================================================================
+     BORDERS
+     ========================================================================== */
+
+  --color-border: rgb(92 49 45 / 12%);
+  --color-divider: rgb(92 49 45 / 16%);
+
+  /* ==========================================================================
+     STATES
+     ========================================================================== */
+
+  --color-hover-overlay: rgb(133 71 66 / 8%);
+  --color-active-overlay: rgb(133 71 66 / 16%);
+  --color-focus-ring: rgb(133 71 66 / 35%);
+
+  /* ==========================================================================
+     RADIUS
+     ========================================================================== */
+
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  /* ==========================================================================
+     SHADOWS
+     ========================================================================== */
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 5%);
+  --shadow-md: 0 4px 8px rgb(0 0 0 / 8%);
+  --shadow-lg: 0 8px 16px rgb(0 0 0 / 12%);
+
+  /* ==========================================================================
+     MOTION
+     ========================================================================== */
+
+  --default-transition-duration: 200ms;
+  --default-transition-timing: ease;
 }
