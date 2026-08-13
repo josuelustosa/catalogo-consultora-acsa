@@ -8,19 +8,25 @@ seguir em novas implementações.
 > fluxo de dados mudar. Ele é a fonte de contexto, não um changelog — o
 > histórico de commits cumpre esse papel.
 
-A fila de tarefas com critérios de aceite fica em [PLANO_IA.md](./PLANO_IA.md).
+O roteiro de trabalho, com as issues e os critérios de aceite, fica em
+[PLANO_DEFINITIVO_V1.md](./PLANO_DEFINITIVO_V1.md).
 
 ---
 
 ## Visão geral
 
-Catálogo de produtos de uma consultora de revenda. O site expõe grupos de
-catálogos (Boticário/Eudora/OUI, Natura/Avon, Romance/Favorita, Moda Íntima,
-Joias e Acessórios) e cada produto leva a uma conversa no WhatsApp com mensagem
-pré-preenchida. Não há carrinho, checkout, autenticação ou back-end próprio.
+Catálogo de produtos de revenda, sob a marca **Aura Beauty**, com pronta-entrega
+em Manaus. O site expõe grupos de catálogos (Boticário/Eudora/OUI, Natura/Avon,
+Romance/Favorita, Moda Íntima, Joias e Acessórios) e cada produto leva a uma
+conversa no WhatsApp com mensagem pré-preenchida. Não há carrinho, checkout,
+autenticação ou back-end próprio.
+
+> O código ainda diz "Consultora Acsa" em alguns pontos. A troca de identidade é
+> a primeira etapa do plano — ver `PLANO_DEFINITIVO_V1.md` §5.
 
 A fonte de dados prevista é uma **Planilha Google**, que devolve uma lista plana
-com os produtos de todas as marcas. Hoje esse retorno é simulado por um mock.
+com os produtos de todas as marcas. Hoje esse retorno é simulado por um mock, e
+a leitura real acontecerá **em tempo de build**, não em runtime — ver Histórico.
 
 ## Stack
 
@@ -119,6 +125,22 @@ Pontos que precisam ser preservados em qualquer alteração:
   esse caso, o de catálogo sem produtos e o de busca sem resultado com
   mensagens distintas — todos via `<EmptyState>`, ver Design system.
 
+### Busca
+
+`searchProducts` casa substring em título **ou** marca, sem operadores nem
+múltiplos termos — o catálogo tem dezenas de itens, não milhares. O debounce de
+250ms fica em `hooks/use-debounced-value.ts`: o input responde na hora, só a
+filtragem espera.
+
+**Trocar de catálogo limpa a busca via `key={slug}`, não via `useEffect`.** O
+reset precisa ser síncrono; com efeito, o valor já debounced do termo antigo
+ainda seria propagado contra a lista nova e a tela piscaria "nenhum produto
+encontrado". Não troque por `useEffect`.
+
+O corte de duas colunas do grid é `md` (768px), não `sm` (640px): em portrait de
+tablet o card ainda respira, e a 640px dois cards deixariam título e preço
+apertados.
+
 ### Tipos
 
 - `Product` (`types/product.type.ts`): linha da planilha. `price` é o preço
@@ -192,9 +214,14 @@ Implementado e verificado (`tsc -b` e `vite build` passam):
   `<EmptyState>`.
 
 O que está aberto — com critérios de aceite — está em
-[PLANO_IA.md](./PLANO_IA.md). Em resumo: consumidor para `groupByBrand`, troca
-do mock pela Planilha Google (traz assincronismo e estados de carregando/erro),
-imagens dos produtos, `Home.tsx` ainda placeholder e ausência de testes.
+[PLANO_DEFINITIVO_V1.md](./PLANO_DEFINITIVO_V1.md). Em resumo: identidade visual
+ainda como "Consultora Acsa", troca do mock pela Planilha Google, imagens dos
+produtos, ausência de SSG e de metadados por rota, `Home.tsx` ainda placeholder,
+sem footer nem botão flutuante, e ausência de testes.
+
+`groupByBrand` continua sem consumidor: a listagem seccionada por marca foi
+movida para fora do escopo do V1 por falta de decisão de UX — ela convive mal
+com a busca (`PLANO_DEFINITIVO_V1.md` §12).
 
 ---
 
@@ -239,4 +266,37 @@ novo. Não reintroduza esse modelo.
 
 **Mantido — mocks separados por responsabilidade.** `mocks/nav-item.mock.ts`
 descreve navegação (estrutura do site); `data/products.mock.ts` simula a origem
-externa de dados. Só o segundo desaparece quando a planilha entrar.
+externa de dados. Quando a planilha entrar, o segundo deixa de ser a origem e
+passa a ser o fixture de fallback para build sem credencial e para os testes.
+
+**Decidido — a planilha é lida em tempo de build, não em runtime.** O plano
+anterior previa que a leitura real traria assincronismo, e que `getCatalogBySlug`
+viraria assíncrona com estados de carregando e erro na página. **Isso vale para
+um fetch no navegador, e não é o caminho escolhido.** Um script de build gera
+`src/data/products.generated.ts` e `catalog.service.ts` muda só a linha de
+import: a API pública e a sincronia ficam intactas, e nenhuma página ganha estado
+novo. A contrapartida aceita é que o conteúdo só atualiza com um novo build,
+disparado por um Deploy Hook a partir da própria planilha.
+
+Consequência para segurança: a credencial da planilha fica em variável **sem
+prefixo `VITE_`**, lida só pelo Node. O Vite só inlina variáveis prefixadas, então
+ela não tem como vazar para o bundle. Em troca, a planilha precisa ser pública
+por link — **nunca coloque preço de custo, fornecedor ou dado pessoal nela**.
+
+**Decidido — SSG próprio, sem trocar de framework.** As rotas passam a ser
+pré-renderizadas em HTML por um script no build, usando `createStaticHandler` /
+`createStaticRouter` / `StaticRouterProvider` (já exportados pelo `react-router`
+7.18 na entrada raiz, marcados `@mode data`) e `react-dom/static`. Astro e
+Next.js foram avaliados e descartados: resolveriam com reescrita problemas que um
+site de 8 rotas não tem. **Enquanto houver SSG, não use `route.lazy` nem code
+splitting** — `lazy` força `initialized = false` no cliente, o que renderiza o
+fallback do `<Suspense>` e causa mismatch de hidratação.
+
+**Decidido — imagens otimizadas no build, nunca servidas da origem remota.** A
+planilha guarda a URL (Cloudinary como destino, Google Drive tolerado); o build
+baixa, recorta em quadrado e emite AVIF/WebP locais em `public/img/`. Por isso o
+campo do tipo `Product` passa a ser `imageKey`, e não `imageUrl`: torna
+impossível, por tipo, renderizar uma origem remota por engano.
+
+O raciocínio completo de cada uma dessas decisões está em
+[PLANO_DEFINITIVO_V1.md](./PLANO_DEFINITIVO_V1.md) §2 a §4.
