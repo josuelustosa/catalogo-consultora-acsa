@@ -2,7 +2,8 @@ import { Link } from "react-router";
 import logo from "../../assets/logo-catalogo-consultora-acsa.png";
 
 function NavBrand() {
-  const logoTitle = "Logo Catálogo Consultora Acsa";
+  const logoTitle =
+    "Logo Catálogo Aura Beauty | Produtos à pronta-entrega em Manaus";
 
   return (
     <>
